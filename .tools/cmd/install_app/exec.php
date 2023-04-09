@@ -1,53 +1,41 @@
 <?php
 
-/**
- *********************************************************************************************** 
- * 
- ***********************************************************************************************
- *
- */
-$Namespace = "HexMonoPHP";
-$monorepo = "novamonline";
-$packageDir = "libs";
-$root = dirname(__DIR__ . '/../../');
 
-// Define the name of the new app
-$appName = readline('Enter the name of the new app: ');
+require_once realpath($GLOBALS['toolsDir'] . '/fileop.php');
 
-// Define the path to the new app directory
-$appPath = $root . '/apps/' . $appName;
+$app_name = readline("Enter the name of your app: ");
 
-// Create the new app directory
-mkdir($appPath);
+$src_dir = realpath($GLOBALS['stubsDir'] . '/app');
+$dst_dir = realpath($GLOBALS['cmdDir'] . '/install_app/.temp') . DS . $app_name;
 
-// Create the composer.json file
-$composerJson = [
-    'name' => $monorepo. '/'  . $appName,
-    'description' => 'Description of the ' . $appName . ' app',
-    'require' => [
-        // Add any required packages here
-    ],
-    'autoload' => [
-        'psr-4' => [
-            'App\\' => 'src/'
-        ]
-    ]
+// Create the destination directory
+if (!file_exists($dst_dir)) {
+    mkdir($dst_dir, 0755, true);
+}
+
+// Copy the stub files to the destination directory
+$callback = function($src, $dst) {
+    echo "Created file: " . $dst . PHP_EOL;
+};
+recursiveCopy($src_dir, $dst_dir, $callback);
+
+// Rename the stub files
+$placeholders = [
+    "__APP__" => $app_name,
+    "__SOME_PLACEHOLDER__" => "some_value",
+    // Add more placeholders here
 ];
-file_put_contents($appPath . '/composer.json', json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+recursiveRename($dst_dir, "/\.stub$/", $placeholders, $callback);
 
-// Create the src directory
-mkdir($appPath . '/src');
+// Move the app to the apps directory
+$app_dir = realpath($GLOBALS['cmdDir'] . '/install_app/.temp') . DS . $app_name;
+$dst_dir = realpath($GLOBALS['cmdDir'] . '/install_app/.temp') . DS . 'apps' . DS . $app_name;
 
-// Create default directories
-$defaultDirs = ['adapters', 'domain', 'ports'];
-foreach($defaultDirs as $dir) {
-    mkdir($appPath . '/src/' . $dir);
+if (!file_exists($dst_dir)) {
+    mkdir($dst_dir, 0755, true);
 }
 
-// Create index.php, config.php, loader.php
-$defaultFiles = ['index', 'config', 'loader'];
-foreach($defaultFiles as $file) {
-    file_put_contents($appPath . '/src/' . $file . '.php', "<?php\n\n// Define your " . $file . ".php here\n");
-}
+recursiveCopy($app_dir, $dst_dir);
+recursiveRemove($app_dir);
 
-echo 'The ' . $appName . ' app has been created successfully.' . PHP_EOL;
+echo "App created successfully: " . $dst_dir . PHP_EOL;

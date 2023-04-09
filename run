@@ -1,7 +1,11 @@
 #!/usr/bin/env php
 <?php
 
-$toolsDir = __DIR__ . '/.tools';
+define('DS', DIRECTORY_SEPARATOR);
+
+$toolsDir = __DIR__ . DS . '.tools';
+$cmdDir = $toolsDir . DS . 'cmd';
+$stubsDir = $toolsDir . DS . 'stubs';
 
 // Check if the command argument is provided
 if (empty($argv[1])) {
@@ -11,9 +15,9 @@ if (empty($argv[1])) {
 
 // Map command aliases to script files
 $commandMap = [
-    'new_app' => 'install_app/exec.php',
-    'new_lib' => 'install_lib/exec.php',
-    'install' => 'installer/exec.php',
+    'new_app' => 'install_app',
+    'new_lib' => 'install_lib',
+    'install' => 'installer',
     // Add more command aliases here
 ];
 
@@ -27,11 +31,12 @@ if (!isset($commandMap[$commandAlias])) {
 }
 
 // Get the path to the command script
-$scriptPath = $toolsDir . '/' . $commandMap[$commandAlias];
+$commandDir = $cmdDir . DS . $commandMap[$commandAlias];
+$scriptPath = $commandDir . DS . 'exec.php';
 
 // Check if the command script exists
 if (!file_exists($scriptPath)) {
-    echo "Command script not found: " . $commandMap[$commandAlias] . PHP_EOL;
+    echo "Command script not found: " . $scriptPath . PHP_EOL;
     exit(1);
 }
 

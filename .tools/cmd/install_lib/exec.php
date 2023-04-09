@@ -1,52 +1,75 @@
 <?php
+
+// Get the name of the app from the user
+$app_name = readline("Enter the name of your app: ");
+
+// Determine the root directory of the project
+$root_dir = getcwd();
+
+// Copy the app stubs to a new directory with the given app name
+recursiveCopy("{$root_dir}/.tools/stubs/app", "{$root_dir}/apps/{$app_name}");
+
+// Replace "__APP__" with the app name in the copied stub files and remove the .stub extension
+recursiveRename("{$root_dir}/apps/{$app_name}", "/\.stub$/", function($filename, $new_filename) use ($app_name) {
+    $content = file_get_contents($filename);
+    $content = str_replace("__APP__", $app_name, $content);
+    file_put_contents($new_filename, $content);
+});
+
+// Copy the lib stubs to a new directory with the given app name
+recursiveCopy("{$root_dir}/.tools/stubs/lib", "{$root_dir}/apps/{$app_name}/lib");
+
+// Remove the .stub extension from the lib composer.json file
+rename("{$root_dir}/apps/{$app_name}/lib/composer.json.stub", "{$root_dir}/apps/{$app_name}/lib/composer.json");
+
+// Replace "__APP__" with the app name in the Dockerfile stub and remove the .stub extension
+$content = file_get_contents("{$root_dir}/.tools/stubs/app/Dockerfile.stub");
+$content = str_replace("__APP__", $app_name, $content);
+file_put_contents("{$root_dir}/apps/{$app_name}/Dockerfile", $content);
+unlink("{$root_dir}/apps/{$app_name}/Dockerfile.stub");
+
+echo "Your app has been created in the {$root_dir}/apps/{$app_name} directory.\n";
+
 /**
- *********************************************************************************************** 
- * 
- ***********************************************************************************************
+ * Recursively copy a directory and its contents.
  *
+ * @param string $src The source directory to copy.
+ * @param string $dst The destination directory to copy to.
  */
-$Namespace = "HexMonoPHP";
-$monorepo = "novamonline";
-$packageDir = "libs";
-$root = dirname(__DIR__ . '/../../');
-// Get the name of the new package
-$packageName = readline('Enter the name of the new package (e.g. my-guzzle-wrapper): ');
+function recursiveCopy($src, $dst) {
+    $dir = opendir($src);
+    if (!is_dir($dst)) {
+        mkdir($dst);
+    }
+    while (($file = readdir($dir)) !== false) {
+        if ($file == "." || $file == "..") {
+            continue;
+        }
+        $src_file = $src . DIRECTORY_SEPARATOR . $file;
+        $dst_file = $dst . DIRECTORY_SEPARATOR . $file;
+        if (is_dir($src_file)) {
+            recursiveCopy($src_file, $dst_file);
+        } else {
+            copy($src_file, $dst_file);
+        }
+    }
+    closedir($dir);
+}
 
-// Define the path to the packages directory
-$packagesPath = $root. "/" .$packageDir . "/";
-
-// Create the package directory
-mkdir($packagesPath . $packageName);
-
-// Create the composer.json file
-$composerJson = [
-    'name' => $monorepo. '/' . $packageName,
-    'description' => 'Description of the ' . $packageName . ' package',
-    'version' => '1.0.0',
-    'autoload' => [
-        'psr-4' => [
-            "'$Namespace\\'" . ucfirst($packageName) . '\\' => 'src/'
-        ]
-    ],
-    'require' => [
-        // Add any required packages here
-    ],
-];
-file_put_contents($packagesPath . $packageName . '/composer.json', json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-
-// Create the src directory
-mkdir($packagesPath . $packageName . '/src');
-
-// Create an example file
-file_put_contents($packagesPath . $packageName . '/src/Example.php', "<?php\n\nnamespace $Namespace\\" . ucfirst($packageName) . ";\n\nclass Example\n{\n    public function hello()\n    {\n        echo 'Hello from the " . $packageName . " package!';\n    }\n}\n");
-
-// Update the root composer.json file to include the new package
-$rootComposerJson = json_decode(file_get_contents($root . '/composer.json'), true);
-$rootComposerJson['repositories'][] = [
-    'type' => 'path',
-    'url' => "'$packageDir/'" . $packageName,
-];
-$rootComposerJson['require'][$packageName] = '^1.0';
-file_put_contents($root . '/composer.json', json_encode($rootComposerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-
-echo 'The ' . $packageName . ' package has been created successfully.' . PHP_EOL;
+/**
+ * Recursively rename files in a directory and its subdirectories.
+ *
+ * @param string $dir The directory to rename files in.
+ * @param string $pattern A regular expression to match filenames to rename.
+ * @param callable $callback A function to call for each renamed file.
+ */
+function recursiveRename($dir, $pattern, $callback) {
+    $dir = realpath($dir);
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::SELF_FIRST);
+    foreach ($iterator as $file) {
+        if ($file->isFile() && preg_match($pattern, $file->getFilename())) {
+            $new_filename = preg_replace($pattern, "", $file->getPathname());
+            $callback($file->getPathname(), $new_filename);
+        }
+    }
+}
