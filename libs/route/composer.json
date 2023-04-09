@@ -1,0 +1,11 @@
+{
+    "name": "novamonline/route",
+    "description": "Description of the route package",
+    "version": "1.0.0",
+    "autoload": {
+        "psr-4": {
+            "'HexMonoPHP\\'Route\\": "src/"
+        }
+    },
+    "require": []
+}

@@ -1,0 +1,17 @@
+{
+    "name": "novamonline/app-one",
+    "autoload": {
+        "psr-4": {
+            "Novamonline\\AppOne\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hilkiah Makemo",
+            "email": "novam.online@gmail.com"
+        }
+    ],
+    "require": {
+        
+    }
+}

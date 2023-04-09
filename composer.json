@@ -1,0 +1,39 @@
+{
+    "name": "novamonline/hex-mono-php",
+    "autoload": {
+        "psr-4": {
+            "HexMonoPhp\\Apps\\": "/apps",
+            "HexMonoPhp\\Library\\": "/libs"
+        }
+    },
+    "authors": [
+        {
+            "name": "Novam Online",
+            "email": "novam.online@gmail.com"
+        }
+    ],
+    "require": {
+        "client": "^1.0",
+        "database": "^1.0",
+        "config": "^1.0",
+        "route": "^1.0"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "libs/client"
+        },
+        {
+            "type": "path",
+            "url": "'libs/'database"
+        },
+        {
+            "type": "path",
+            "url": "'libs/'config"
+        },
+        {
+            "type": "path",
+            "url": "'libs/'route"
+        }
+    ]
+}
