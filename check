@@ -1,0 +1,48 @@
+#!/usr/bin/env php
+<?php
+
+// Check PHP version
+$installedVersion = phpversion();
+$url = "https://www.php.net/releases/?json";
+$json = file_get_contents($url);
+$releases = json_decode($json, true);
+$latestVersion = array_key_first($releases);
+
+if (version_compare($installedVersion, $latestVersion, '<')) {
+    echo "Your installed PHP version ($installedVersion) is older than the latest version ($latestVersion).\n";
+    echo "Consider updating PHP to the latest version.\n";
+} else {
+    echo "Your PHP version ($installedVersion) is up to date.\n";
+}
+
+// Check for web server
+if (!isset($_SERVER['SERVER_SOFTWARE'])) {
+    echo "No web server detected.\n";
+} else {
+    echo "Web server detected: ".$_SERVER['SERVER_SOFTWARE']."\n";
+}
+
+// Check for database
+if (!extension_loaded('mysqli')) {
+    echo "Error: mysqli extension not installed.\n";
+} else {
+    echo "mysqli extension installed.\n";
+}
+
+// Check for Composer
+$composerVersion = exec('composer --version');
+if (stripos($composerVersion, 'Composer') === false) {
+    echo "Error: Composer not installed.\n";
+} else {
+    echo "Composer installed.\n";
+}
+
+// Check for Docker
+$dockerVersion = exec('docker --version');
+if (stripos($dockerVersion, 'Docker') === false) {
+    echo "Error: Docker not installed.\n";
+} else {
+    echo "Docker installed.\n";
+}
+
+?>

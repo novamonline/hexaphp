@@ -1,0 +1,10 @@
+{
+    "name": "novamonline/",
+    "description": "Description of the  library",
+    "require": [],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

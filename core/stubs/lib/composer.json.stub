@@ -1,0 +1,10 @@
+{
+    "name": "__VENDOR__/__LIB__",
+    "description": "Description of the __LIB__ library",
+    "require": [],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

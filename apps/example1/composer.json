@@ -1,0 +1,10 @@
+{
+    "name": "novamonline/example1",
+    "description": "Description of the example1 application",
+    "require": [],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

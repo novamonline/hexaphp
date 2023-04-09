@@ -1,44 +1,45 @@
 #!/usr/bin/env php
 <?php
 
-define('DS', DIRECTORY_SEPARATOR);
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+if (!defined('ROOT')) {
+    define('ROOT', realpath(__DIR__) . DS);
+}
+echo "=========================\n";
+echo "  HexMonoPHP CLI \n";
+echo "=========================\n";
 
-$toolsDir = __DIR__ . DS . '.tools';
-$cmdDir = $toolsDir . DS . 'cmd';
-$stubsDir = $toolsDir . DS . 'stubs';
+require_once ROOT . 'core' .DS. 'autoload.php';
 
-// Check if the command argument is provided
-if (empty($argv[1])) {
-    echo "Usage: ./run <command>" . PHP_EOL;
+use Core\Cmd\CreateAppCmd;
+use Core\Cmd\CreateLibCmd;
+
+$args = array_slice($argv, 1);
+
+if (count($args) < 2) {
+    echo "Usage: run <Cmd> <name>\n";
     exit(1);
 }
 
-// Map command aliases to script files
-$commandMap = [
-    'new_app' => 'install_app',
-    'new_lib' => 'install_lib',
-    'install' => 'installer',
-    // Add more command aliases here
-];
+$Cmd = strtolower($args[0]);
+$name = $args[1];
 
-// Get the command to run
-$commandAlias = $argv[1];
-
-// Check if the command alias exists in the map
-if (!isset($commandMap[$commandAlias])) {
-    echo "Command not found: " . $commandAlias . PHP_EOL;
-    exit(1);
+switch ($Cmd) {
+    case 'create:app':
+        $createCmd = new CreateAppCmd();
+        $createCmd->execute([$name]);
+        break;
+    case 'create:lib':
+        $createCmd = new CreateLibCmd();
+        $createCmd->execute([$name]);
+        break;
+    case 'serve:app':
+        $createCmd = new ServeAppCmd();
+        $createCmd->execute([$name]);
+        break;
+    default:
+        echo "Unknown Cmd: {$Cmd}\n";
+        exit(1);
 }
-
-// Get the path to the command script
-$commandDir = $cmdDir . DS . $commandMap[$commandAlias];
-$scriptPath = $commandDir . DS . 'exec.php';
-
-// Check if the command script exists
-if (!file_exists($scriptPath)) {
-    echo "Command script not found: " . $scriptPath . PHP_EOL;
-    exit(1);
-}
-
-// Load the command script
-require $scriptPath;

@@ -1,0 +1,10 @@
+{
+    "name": "novamonline/routing",
+    "description": "Description of the routing library",
+    "require": [],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
