@@ -8,7 +8,7 @@
 $Namespace = "HexMonoPHP";
 $monorepo = "novamonline";
 $packageDir = "libs";
-$root = dirname(__DIR__);
+$root = dirname(__DIR__ . '/../../');
 // Get the name of the new package
 $packageName = readline('Enter the name of the new package (e.g. my-guzzle-wrapper): ');
 

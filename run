@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php
+
+$toolsDir = __DIR__ . '/.tools';
+
+// Check if the command argument is provided
+if (empty($argv[1])) {
+    echo "Usage: ./run <command>" . PHP_EOL;
+    exit(1);
+}
+
+// Map command aliases to script files
+$commandMap = [
+    'new_app' => 'install_app/exec.php',
+    'new_lib' => 'install_lib/exec.php',
+    'install' => 'installer/exec.php',
+    // Add more command aliases here
+];
+
+// Get the command to run
+$commandAlias = $argv[1];
+
+// Check if the command alias exists in the map
+if (!isset($commandMap[$commandAlias])) {
+    echo "Command not found: " . $commandAlias . PHP_EOL;
+    exit(1);
+}
+
+// Get the path to the command script
+$scriptPath = $toolsDir . '/' . $commandMap[$commandAlias];
+
+// Check if the command script exists
+if (!file_exists($scriptPath)) {
+    echo "Command script not found: " . $commandMap[$commandAlias] . PHP_EOL;
+    exit(1);
+}
+
+// Load the command script
+require $scriptPath;

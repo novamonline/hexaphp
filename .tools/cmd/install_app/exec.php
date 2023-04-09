@@ -9,13 +9,13 @@
 $Namespace = "HexMonoPHP";
 $monorepo = "novamonline";
 $packageDir = "libs";
-$root = dirname(__DIR__);
+$root = dirname(__DIR__ . '/../../');
 
 // Define the name of the new app
 $appName = readline('Enter the name of the new app: ');
 
 // Define the path to the new app directory
-$appPath =$root . '/apps/' . $appName;
+$appPath = $root . '/apps/' . $appName;
 
 // Create the new app directory
 mkdir($appPath);
