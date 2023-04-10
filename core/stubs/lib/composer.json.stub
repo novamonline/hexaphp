@@ -1,10 +1,14 @@
 {
     "name": "__VENDOR__/__LIB__",
+    "type": "library",
     "description": "Description of the __LIB__ library",
     "require": [],
     "autoload": {
         "psr-4": {
             "App\\": "src/"
         }
-    }
+    },
+     "config": {
+        "vendor-dir": "../../vendor"
+    },
 }

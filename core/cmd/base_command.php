@@ -109,7 +109,7 @@ abstract class BaseCommand
         ];
 
         $composerJson['repositories'][] = $newRepository;
-        $composerJson['require']["{$this->vendorName}/{$libName}"] = "^1.0";
+        $composerJson['require']["{$this->vendorName}/{$libName}"] = "*";
 
         $updatedComposerJsonContent = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents($composerJsonPath, $updatedComposerJsonContent);

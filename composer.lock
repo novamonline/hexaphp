@@ -1,0 +1,121 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "7cbe90948de7c0d2a0a74b07be263ada",
+    "packages": [
+        {
+            "name": "novam/database",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "libs/database",
+                "reference": "9bd3e0d7a5ab0e654155446ac6b718a86e9e8215"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "App\\": "src/"
+                }
+            },
+            "description": "Description of the database library",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "novam/http",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "libs/http",
+                "reference": "2ab2e650fb93d532324f0b047563ec907689b6fe"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "App\\": "src/"
+                }
+            },
+            "description": "Description of the http library",
+            "transport-options": {
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "phpstan/phpstan",
+            "version": "1.10.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "c5dc4fc10a55c7f73d41f4e3a1622cc312a99dcb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c5dc4fc10a55c7f73d41f4e3a1622cc312a99dcb",
+                "reference": "c5dc4fc10a55c7f73d41f4e3a1622cc312a99dcb",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "default-branch": true,
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-04-09T14:21:12+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

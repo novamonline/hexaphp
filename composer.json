@@ -16,12 +16,18 @@
         {
             "type": "path",
             "url": "libs/http"
+        },
+        {
+            "type": "path",
+            "url": "libs/database"
         }
     ],
     "require-dev": {
         "phpstan/phpstan": "^1.10"
     },
     "require": {
-        "novam/http": "*"
-    }
+        "novam/http": "*",
+        "novam/database": "*"
+    },
+    "minimum-stability": "dev"
 }
