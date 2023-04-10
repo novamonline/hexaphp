@@ -12,6 +12,8 @@ RUN composer dump-autoload --optimize
 
 FROM php:8.0-fpm-alpine
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 COPY --from=stage app/apps/example /app
 COPY --from=stage app/vendor /app/vendor
 
