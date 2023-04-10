@@ -1,8 +1,9 @@
 <?php 
 
-namespace Core\Cmd;
+namespace HexaPHP\Core\Cmd;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use HexaPHP\Helpers\Str;
 
 
 class StubProcessor
@@ -28,5 +29,26 @@ class StubProcessor
                 file_put_contents($newPath, $content);
             }
         }
+    }
+
+    public function replace(array $placeholders, string $content): string
+    {
+        $delim = '|';
+
+        return preg_replace_callback('/\{\{([\w|]+)\}\}/', function ($matches) use ($delim, $placeholders) {
+            [$varName, $func] = array_pad(explode($delim, $matches[1], 2), 2, null);
+            if (isset($placeholders[$varName])) {
+                $value = $placeholders[$varName];
+                if ($func) {
+                    if (method_exists(Str::class, $func)) {
+                        $value = Str::$func($value);
+                    } else {
+                        throw new \RuntimeException("Invalid function: {$func}");
+                    }
+                }
+                return $value;
+            }
+            throw new \RuntimeException("Invalid placeholder: {$varName}");
+        }, $content);
     }
 }

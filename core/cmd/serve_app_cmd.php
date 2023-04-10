@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Cmd;
+namespace HexaPHP\Core\Cmd;
 
 class ServeAppCmd extends BaseCommand
 {
@@ -17,6 +17,7 @@ class ServeAppCmd extends BaseCommand
 
     public function execute(array $args): void
     {
+        var_dump($args);
         $this->appName = $args[0];
         $this->host = $args[1] ?? 'localhost';
         $this->port = $args[2] ?? 8000;

@@ -1,5 +1,6 @@
 <?php
-namespace Core\Cmd;
+namespace HexaPHP\Core\Cmd;
+use HexaPHP\Helpers\Str;
 
 class CreateLibCmd extends BaseCommand
 {
@@ -15,12 +16,10 @@ class CreateLibCmd extends BaseCommand
 
         $stubsDir = "./core/stubs/lib";
         $placeholders = $this->getPlaceholders("{$stubsDir}_placeholders.json");
-        $replacements = array_combine(
-            array_keys($placeholders),
-            array_map(fn($varName) => $this->$varName, $placeholders)
-        );
-
-        $this->processStubs($stubsDir, $libPath, $replacements);
+        
+        $this->processStubs($stubsDir, $libPath, function ($content) use($placeholders) {
+            return $this->stubReplace($placeholders, $content, "|");
+        });
 
         $this->updateComposerJson(ROOT, $this->libName);
     }

@@ -13,19 +13,23 @@ if (!defined('CORE')) {
 require_once ROOT . 'vendor' . DS . 'autoload.php';
 
 spl_autoload_register(function ($className) {
-    $prefix = strstr($className, '\\', true) . '\\';
+    $prefixes = ['HexaPHP\\'];
 
-    if (strpos($className, $prefix) !== 0) {
-        return;
-    }
+    foreach ($prefixes as $prefix) {
+        if (strpos($className, $prefix) !== 0) {
+            continue;
+        }
 
-    $relativeClassName = substr($className, strlen($prefix));
-    $snakeCaseClassName = preg_replace_callback('/\\B([A-Z])/', function ($matches) {
-        return '_' . strtolower($matches[1]);
-    }, $relativeClassName);
+        $relativeClassName = substr($className, strlen($prefix));
+        $snakeCaseClassName = preg_replace_callback('/\\B([A-Z])/', function ($matches) {
+            return '_' . strtolower($matches[1]);
+        }, $relativeClassName);
 
-    $file = CORE . str_replace('\\', DS, $snakeCaseClassName) . '.php';
-    if (file_exists($file)) {
-        require_once $file;
+        $file = ROOT . str_replace('\\', DS, strtolower($snakeCaseClassName)) . '.php';
+        if (file_exists($file)) {
+            require_once $file;
+            return;
+        }
     }
 });
+

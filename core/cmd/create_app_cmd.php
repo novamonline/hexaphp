@@ -1,5 +1,7 @@
 <?php
-namespace Core\Cmd;
+namespace HexaPHP\Core\Cmd;
+
+use HexaPHP\Helpers\Str;
 
 class CreateAppCmd extends BaseCommand
 {
@@ -14,13 +16,11 @@ class CreateAppCmd extends BaseCommand
         
         $stubsDir = "./core/stubs/app";
         $placeholders = $this->getPlaceholders("{$stubsDir}_placeholders.json");
-        $replacements = array_combine(
-            array_keys($placeholders), 
-            array_map(fn($varName) => $this->$varName, $placeholders)
-        );
 
-       
-        $this->processStubs($stubsDir, $appPath, $replacements);
+        $this->processStubs($stubsDir, $appPath, function ($content) use($placeholders) {
+            return $this->stubReplace($placeholders, $content, "|");
+        });
+
     }
 }
 

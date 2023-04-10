@@ -8,14 +8,14 @@ if (!defined('ROOT')) {
     define('ROOT', realpath(__DIR__) . DS);
 }
 echo "=========================\n";
-echo "  HexaHP CLI \n";
+echo "  HexaPHP CLI \n";
 echo "=========================\n";
 
 require_once ROOT . 'core' .DS. 'autoload.php';
 
-use Core\Cmd\CreateAppCmd;
-use Core\Cmd\CreateLibCmd;
-use Core\Cmd\ServeAppCmd;
+use HexaPHP\Core\Cmd\CreateAppCmd;
+use HexaPHP\Core\Cmd\CreateLibCmd;
+use HexaPHP\Core\Cmd\ServeAppCmd;
 
 $args = array_slice($argv, 1);
 
@@ -24,24 +24,24 @@ if (count($args) < 2) {
     exit(1);
 }
 
-$Cmd = strtolower($args[0]);
-$name = $args[1];
+$Cmd = array_shift($args);
+$name = array_shift($args);
 
-switch ($Cmd) {
+switch (strtolower($Cmd)) {
     case 'install':
         exec("composer install --prefer-dist --no-cache");
         break;
     case 'create:app':
         $createCmd = new CreateAppCmd();
-        $createCmd->execute([$name]);
+        $createCmd->execute([$name, ...$args]);
         break;
     case 'create:lib':
         $createCmd = new CreateLibCmd();
-        $createCmd->execute([$name]);
+        $createCmd->execute([$name, ...$args]);
         break;
     case 'serve:app':
         $createCmd = new ServeAppCmd();
-        $createCmd->execute([$name]);
+        $createCmd->execute([$name, ...$args]);
         break;
     case 'build:app':
         echo "Deploying {$name}...\n";

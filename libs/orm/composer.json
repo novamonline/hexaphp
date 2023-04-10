@@ -1,10 +1,10 @@
 {
-    "name": "novam/database",
+    "name": "novam/orm",
     "type": "library",
     "description": "Description of the database library",
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "HexaPHP\\Libs\\App\\": "src/"
         }
     },
     "require": {

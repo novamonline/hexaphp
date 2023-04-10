@@ -1,8 +1,6 @@
 <?php 
 namespace HexaPHP\Core\Cmd;
 use RuntimeException;
-use HexaPHP\Helpers\Str;
-
 abstract class BaseCommand
 {
     protected string $vendorName;
@@ -13,8 +11,6 @@ abstract class BaseCommand
         if (!is_dir($path)) {
             echo "Creating directory: {$path}\n";
             mkdir($path, 0777, true);
-        } else {
-            echo "Directory already exists: {$path}\n";
         }
     }
 
@@ -66,7 +62,7 @@ abstract class BaseCommand
         );
     }
 
-    protected function processStubs(string $stubsDir, string $destinationDir, callable $callback): void
+    protected function processStubs(string $stubsDir, string $destinationDir, array $replacements): void
     {
         $files = scandir($stubsDir);
 
@@ -76,22 +72,26 @@ abstract class BaseCommand
             }
 
             $stubPath = "{$stubsDir}/{$file}";
-            $destinationPath = "{$destinationDir}/" . str_replace('.stub', '', $file);
+            
+            // Process the file name using the processFileName method
+            $processedFileName = $this->processFileName($file, $replacements);
+
+            $destinationPath = "{$destinationDir}/" . str_replace('.stub', '', $processedFileName);
 
             if (is_dir($stubPath)) {
                 $this->createDirectory($destinationPath);
-                $this->processStubs($stubPath, $destinationPath, $callback);
+                $this->processStubs($stubPath, $destinationPath, $replacements);
             } else {
                 $content = file_get_contents($stubPath);
-
-                // Call the $callback function to replace the placeholders in the stub content
-                $content = $callback($content);
-
+                $content = str_replace(
+                    array_keys($replacements), 
+                    array_values($replacements), 
+                    $content
+                );
                 file_put_contents($destinationPath, $content);
             }
         }
     }
-
 
     protected function updateComposerJson(string $baseDir, string $libName): void
     {
@@ -116,24 +116,93 @@ abstract class BaseCommand
 
         echo "composer.json has been updated to include the new library.\n";
     }
+}
 
-    public function stubReplace(array $placeholders, string $content, $delim = "|"): string
+<?php
+namespace HexaPHP\Core\Cmd;
+
+class CreateAppCmd extends BaseCommand
+{
+    protected string $appName;
+    protected string $vendorName = "novam";
+    public function execute(array $args): void
     {
-        return preg_replace_callback('/\{\{([\w|]+)\}\}/', function ($matches) use ($delim, $placeholders) {
-            [$varName, $func] = array_pad(explode($delim, $matches[1], 2), 2, null);
-            if (isset($placeholders[$varName])) {
-                $value = $placeholders[$varName];
-                if ($func) {
-                    if (method_exists(Str::class, $func)) {
-                        $value = Str::$func($value);
-                    } else {
-                        throw new RuntimeException("Invalid function: {$func}");
-                    }
-                }
-                return $value;
-            }
-            throw new RuntimeException("Invalid placeholder: {$varName}");
+        echo "Creating a new App...\n";
+        $this->appName = $args[0];
+        $appPath = "./apps/{$this->appName}";
+        $this->createDirectory($appPath);
+        
+        $stubsDir = "./core/stubs/app";
+        $placeholders = $this->getPlaceholders("{$stubsDir}_placeholders.json");
+        
+        $delim = "|";
+        $replacements = array_combine(
+            array_keys($placeholders), 
+            array_map(fn($varName) => (Str::has($varName, $delim)
+            ? Str::parseAndCall($this->$varName, $delim)
+            : $this->$varName ), $placeholders)
+        );
 
-        }, $content);
+       
+        $this->processStubs($stubsDir, $appPath, $replacements);
+    }
+}
+
+public function execute(array $args): void
+    {
+
+        $this->libName = $args[0];
+        $libPath = "./libs/{$this->libName}";
+        $this->createDirectory($libPath);
+
+        $stubsDir = "./core/stubs/lib";
+        $placeholders = $this->getPlaceholders("{$stubsDir}_placeholders.json");
+        
+        $delim = "|";
+        $replacements = array_combine(
+            array_keys($placeholders), 
+            array_map(fn($varName) => (Str::has($varName, $delim)
+            ? Str::parseAndCall($this->$varName, $delim)
+            : $this->$varName ), $placeholders)
+        );
+
+        $this->processStubs($stubsDir, $libPath, $replacements);
+
+        $this->updateComposerJson(ROOT, $this->libName);
+    }
+
+
+<?php
+
+namespace HexaPHP\Core\Cmd;
+
+class ServeAppCmd extends BaseCommand
+{
+    private string $appName;
+    private string $host;
+    private int $port;
+
+    // public function __construct(string $appDirectory, string $host = 'localhost', int $port = 8000)
+    // {
+    //     $this->appDirectory = $appDirectory;
+    //     $this->host = $host;
+    //     $this->port = $port;
+    // }
+
+    public function execute(array $args): void
+    {
+        var_dump($args);
+        $this->appName = $args[0];
+        $this->host = $args[1] ?? 'localhost';
+        $this->port = $args[2] ?? 8000;
+        $appRoot = "./apps/{$this->appName}";
+        echo "Serving app from $appRoot...\n";
+
+        // Construct the command to start the web server
+        $command = sprintf('php -S %s:%d -t %s', $this->host, $this->port, $appRoot);
+
+        // Start the web server
+        echo "Starting web server on http://{$this->host}:{$this->port}...\n";
+        passthru($command);
     }
 }
