@@ -40,6 +40,15 @@ switch ($Cmd) {
         $createCmd = new ServeAppCmd();
         $createCmd->execute([$name]);
         break;
+    case 'deploy':
+        echo "Deploying {$name}...\n";
+        exec("composer install --no-dev --optimize-autoloader");
+        exec("composer package");
+        break;
+    case 'test:app':
+        echo "Testing {$name}...\n";
+        exec("composer test");
+        break;
     default:
         echo "Unknown Cmd: {$Cmd}\n";
         exit(1);
