@@ -40,7 +40,7 @@ switch ($Cmd) {
         $createCmd = new ServeAppCmd();
         $createCmd->execute([$name]);
         break;
-    case 'deploy':
+    case 'build':
         echo "Deploying {$name}...\n";
         exec("composer install --no-dev --optimize-autoloader");
         exec("composer package");
@@ -49,6 +49,11 @@ switch ($Cmd) {
         echo "Testing {$name}...\n";
         exec("composer test");
         break;
+    case 'deploy':
+        echo "Deploying {$name}...\n";
+        exec("scp package.zip user@production:/path/to/destination");
+        break;
+        
     default:
         echo "Unknown Cmd: {$Cmd}\n";
         exit(1);

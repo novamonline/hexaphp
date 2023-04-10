@@ -5,8 +5,7 @@ This document provides guidance on deploying HexaPHP applications to a productio
 To deploy a HexaPHP application, you first need to build the necessary artifacts. To do this, you can use the composer command to install dependencies and build a package:
 
 ```
-composer install --no-dev --optimize-autoloader
-composer package
+php run build
 ```
 This will create a package.zip file containing the built artifacts.
 
@@ -14,7 +13,7 @@ This will create a package.zip file containing the built artifacts.
 To deploy the built artifacts, you can use a tool like scp or rsync to copy the package.zip file to the production environment:
 
 ```
-scp package.zip user@production:/path/to/destination
+php run deploy
 ```
 Once the file is copied to the production environment, you can extract it and start the PHP process:
 
