@@ -15,6 +15,7 @@ require_once ROOT . 'core' .DS. 'autoload.php';
 
 use Core\Cmd\CreateAppCmd;
 use Core\Cmd\CreateLibCmd;
+use Core\Cmd\ServeAppCmd;
 
 $args = array_slice($argv, 1);
 

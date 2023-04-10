@@ -4,6 +4,7 @@ namespace Core\Cmd;
 class CreateAppCmd extends BaseCommand
 {
     protected string $appName;
+    protected string $vendorName = "novam";
     public function execute(array $args): void
     {
         echo "Creating a new App...\n";

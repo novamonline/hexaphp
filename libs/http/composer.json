@@ -1,6 +1,6 @@
 {
-    "name": "novamonline/example1",
-    "description": "Description of the example1 application",
+    "name": "novam/http",
+    "description": "Description of the http library",
     "require": [],
     "autoload": {
         "psr-4": {

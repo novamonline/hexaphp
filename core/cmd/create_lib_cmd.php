@@ -4,10 +4,11 @@ namespace Core\Cmd;
 class CreateLibCmd extends BaseCommand
 {
     protected string $libName;
+    protected string $vendorName = "novam";
 
     public function execute(array $args): void
     {
-        $this->vendorName = "novam";
+
         $this->libName = $args[0];
         $libPath = "./libs/{$this->libName}";
         $this->createDirectory($libPath);

@@ -1,8 +1,20 @@
-FROM php:latest as stage
+# Use the custom PHP 8.0 base image
+FROM my-php-app
 
+# Set the working directory to /app
+WORKDIR /app
 
-FROM nginx
-copy --from=stage /usr/local/bin/php /usr/local/bin/php
+# Copy the application files to the container
+COPY apps/example ./
 
+# Install application dependencies
+RUN composer install --no-scripts --no-autoloader
 
-EXPOSE 80
+# Generate the Composer autoload file
+RUN composer dump-autoload --optimize
+
+# Expose port 8000 for the PHP built-in web server
+EXPOSE 8000
+
+# Start the PHP built-in web server
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]

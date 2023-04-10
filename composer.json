@@ -15,26 +15,13 @@
     "repositories": [
         {
             "type": "path",
-            "url": "libs/routing"
-        },
-        {
-            "type": "path",
-            "url": "libs/routing"
-        },
-        {
-            "type": "path",
-            "url": "libs/routing"
-        },
-        {
-            "type": "path",
-            "url": "libs/container"
-        },
-        {
-            "type": "path",
-            "url": "libs/database"
+            "url": "libs/http"
         }
     ],
     "require-dev": {
         "phpstan/phpstan": "^1.10"
+    },
+    "require": {
+        "novam/http": "*"
     }
 }
