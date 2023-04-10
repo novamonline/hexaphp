@@ -21,13 +21,9 @@ Change into the project directory:
 ```
 cd hexaphp
 ```
-Install dependencies:
+Install dependencies and start the development environment:
 ```
-composer install
-```
-Start the development environment:
-```
-php run install
+php run install .
 ```
 Verify that the environment is running by running:
 ```

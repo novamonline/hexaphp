@@ -28,6 +28,9 @@ $Cmd = strtolower($args[0]);
 $name = $args[1];
 
 switch ($Cmd) {
+    case 'install':
+        exec("composer install --prefer-dist --no-cache");
+        break;
     case 'create:app':
         $createCmd = new CreateAppCmd();
         $createCmd->execute([$name]);
@@ -55,8 +58,8 @@ switch ($Cmd) {
         break;
     case 'deploy:app':
         echo "Deploying {$name}...\n";
-        
-        exec("scp package.zip user@production:/path/to/destination");
+        $env = $args[2] ?? 'local';
+        // exec("scp package.zip user@production:/path/to/destination");
         break;
         
     default:
