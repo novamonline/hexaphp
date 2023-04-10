@@ -10,7 +10,11 @@ To use HexaPHP, you will need the following installed on your system:
 ## Setup
 Clone the HexaPHP repository:
 ```
-git clone https://github.com/yourusername/hexaphp.git
+git clone https://github.com/novamonline/hexaphp.git
+```
+or, with SSH
+```
+git clone git@github.com:novamonline/hexaphp.git
 ```
 Change into the project directory:
 
@@ -23,9 +27,12 @@ composer install
 ```
 Start the development environment:
 ```
-docker-compose up -d
+php run install
 ```
-Verify that the environment is running by visiting http://localhost:8000 in your browser.
+Verify that the environment is running by running:
+```
+php check
+```
 ## Usage
 To create a new HexaPHP application, you can use the following command:
 
@@ -33,3 +40,8 @@ To create a new HexaPHP application, you can use the following command:
 php run create:app myapp
 ```
 This will create a new application named myapp in the apps directory. You can then navigate into the new application directory and start developing your application.
+
+Similarly, you can create a new reusable library with:
+```
+php run create:lib
+```
