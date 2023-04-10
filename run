@@ -8,7 +8,7 @@ if (!defined('ROOT')) {
     define('ROOT', realpath(__DIR__) . DS);
 }
 echo "=========================\n";
-echo "  HexMonoPHP CLI \n";
+echo "  HexaHP CLI \n";
 echo "=========================\n";
 
 require_once ROOT . 'core' .DS. 'autoload.php';
@@ -40,17 +40,22 @@ switch ($Cmd) {
         $createCmd = new ServeAppCmd();
         $createCmd->execute([$name]);
         break;
-    case 'build':
+    case 'build:app':
         echo "Deploying {$name}...\n";
-        exec("composer install --no-dev --optimize-autoloader");
-        exec("composer package");
+        exec("composer install --prefer-dist --no-cache");
+        exec("docker build -t hexapp:latest .");
+        
+        if ($name != "."){
+            exec("docker build -t hexapp/$name --build-arg BASE_IMAGE=hexapp:latest ./apps/$name");
+        }
         break;
     case 'test:app':
         echo "Testing {$name}...\n";
         exec("composer test");
         break;
-    case 'deploy':
+    case 'deploy:app':
         echo "Deploying {$name}...\n";
+        
         exec("scp package.zip user@production:/path/to/destination");
         break;
         

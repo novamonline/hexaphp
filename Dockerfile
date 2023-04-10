@@ -1,5 +1,5 @@
 # Use the official PHP 8.0 image as the base image
-FROM php:8.0
+FROM php:8.1
 
 # Set the working directory to /app
 WORKDIR /app
@@ -17,12 +17,11 @@ RUN docker-php-ext-install zip mysqli
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy the composer files to the container
-COPY composer.json composer.lock ./
-RUN composer install --no-scripts --no-autoloader
 
-# Copy the rest of the application to the container
+# Copy the the application to the container
 COPY . .
+
+RUN composer install --no-scripts --no-autoloader
 
 # Generate the Composer autoload file
 RUN composer dump-autoload --optimize

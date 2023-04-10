@@ -2,8 +2,8 @@
     "name": "novamonline/hex-mono-php",
     "autoload": {
         "psr-4": {
-            "HexMonoPhp\\Apps\\": "/apps",
-            "HexMonoPhp\\Library\\": "/libs"
+            "HexaHP\\Apps\\": "/apps",
+            "HexaHP\\Library\\": "/libs"
         }
     },
     "authors": [
