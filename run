@@ -7,41 +7,58 @@ if (!defined('DS')) {
 if (!defined('ROOT')) {
     define('ROOT', realpath(__DIR__) . DS);
 }
-echo "=========================\n";
+echo "===============================\n";
 echo "  HexaPHP CLI \n";
-echo "=========================\n";
+echo "===============================\n";
 
 require_once ROOT . 'core' .DS. 'autoload.php';
 
 use HexaPHP\Core\Cmd\CreateAppCmd;
 use HexaPHP\Core\Cmd\CreateLibCmd;
 use HexaPHP\Core\Cmd\ServeAppCmd;
+use HexaPHP\Core\Cmd\RemoveLibCmd;
 
 $args = array_slice($argv, 1);
 
-if (count($args) < 2) {
-    echo "Usage: run <Cmd> <name>\n";
-    exit(1);
-}
+
 
 $Cmd = array_shift($args);
 $name = array_shift($args);
+
+$readArg = function(string $appOrLib) {
+    echo "Please enter the name of the $appOrLib:";
+    $handle = fopen ("php://stdin","r");
+    $line = fgets($handle);
+    $entry = trim($line);
+    if ($entry == ""){
+        echo "Usage: run <Cmd> <name>\n";
+        exit(1);
+    }
+};
+
+$runCommand = function($cmd, $type) use($readArg, $name, $args){
+    $createCmd = new $cmd();
+    if ($name == ""){
+        $name = $readArg($type);
+    }
+    $createCmd->execute([$name, ...$args]);
+};
 
 switch (strtolower($Cmd)) {
     case 'install':
         exec("composer install --prefer-dist --no-cache");
         break;
     case 'create:app':
-        $createCmd = new CreateAppCmd();
-        $createCmd->execute([$name, ...$args]);
+        $runCommand(CreateAppCmd::class, 'app');
         break;
     case 'create:lib':
-        $createCmd = new CreateLibCmd();
-        $createCmd->execute([$name, ...$args]);
+        $runCommand(CreateLibCmd::class, 'lib');
+        break;
+    case 'remove:lib':
+        $runCommand(RemoveLibCmd::class, 'lib');
         break;
     case 'serve:app':
-        $createCmd = new ServeAppCmd();
-        $createCmd->execute([$name, ...$args]);
+        $runCommand(ServeAppCmd::class, 'app');
         break;
     case 'build:app':
         echo "Deploying {$name}...\n";

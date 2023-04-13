@@ -21,7 +21,7 @@ class CreateLibCmd extends BaseCommand
             return $this->stubReplace($placeholders, $content, "|");
         });
 
-        $this->updateComposerJson(ROOT, $this->libName);
+        $this->addToComposerJson(ROOT, $this->libName);
     }
 
     

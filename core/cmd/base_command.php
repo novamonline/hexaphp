@@ -93,7 +93,7 @@ abstract class BaseCommand
     }
 
 
-    protected function updateComposerJson(string $baseDir, string $libName): void
+    protected function addToComposerJson(string $baseDir, string $libName): void
     {
         $composerJsonPath = $baseDir . 'composer.json';
         $composerJsonContent = file_get_contents($composerJsonPath);
@@ -136,4 +136,65 @@ abstract class BaseCommand
 
         }, $content);
     }
+
+    protected function removeFromComposerJson(string $baseDir, string $libName): void
+    {
+        $composerJsonPath = $baseDir . 'composer.json';
+        $composerJsonContent = file_get_contents($composerJsonPath);
+        $composerJson = json_decode($composerJsonContent, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new RuntimeException("Invalid JSON in file: {$composerJsonPath}");
+        }
+
+        $repositoryIndex = $this->findRepositoryIndex($composerJson, $libName);
+        if ($repositoryIndex !== null) {
+            array_splice($composerJson['repositories'], $repositoryIndex, 1);
+        }
+
+        $packageName = "{$this->vendorName}/{$libName}";
+        if (isset($composerJson['require'][$packageName])) {
+            unset($composerJson['require'][$packageName]);
+        }
+
+        $updatedComposerJsonContent = json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents($composerJsonPath, $updatedComposerJsonContent);
+
+        echo "composer.json has been updated to remove the library.\n";
+    }
+
+    protected function findRepositoryIndex(array $composerJson, string $libName): ?int
+    {
+        $repositoryUrl = "libs/{$libName}";
+        foreach ($composerJson['repositories'] as $i => $repository) {
+            if (isset($repository['url']) && $repository['url'] === $repositoryUrl) {
+                return $i;
+            }
+        }
+        return null;
+    }
+
+
+    protected function removeDirectory(string $path): void
+    {
+        $files = scandir($path);
+
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            }
+
+            $filePath = "{$path}/{$file}";
+
+            if (is_dir($filePath)) {
+                $this->removeDirectory($filePath);
+            } else {
+                unlink($filePath);
+            }
+        }
+
+        rmdir($path);
+        echo "Removed directory: {$path}\n";
+    }   
+
 }

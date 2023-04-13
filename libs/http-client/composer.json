@@ -2,9 +2,10 @@
     "name": "__VENDOR__/__LIB__",
     "type": "library",
     "description": "Description of the __LIB__ library",
+    "require": [],
     "autoload": {
         "psr-4": {
-            "HexaPHP\\Libs\\__LIB__|upper": "src/"
+            "HexaPHP\\Apps\\__LIB__|upper": "src/"
         }
     },
      "config": {
