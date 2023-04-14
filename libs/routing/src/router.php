@@ -27,7 +27,9 @@ class Router
         if (is_callable($action)) {
             return call_user_func_array($action, $params);
         }
-    
+
+        $className = $methodName = null;
+
         if (is_string($action)) {
             [$className, $methodName] = preg_split('/@|::/', $action);
         }
@@ -49,7 +51,6 @@ class Router
     
             return call_user_func_array([$obj, $methodName], $params);
         }
-        var_dump($action);
         throw new \Exception("Invalid route: {$action}");
     }
 }

@@ -49,7 +49,8 @@
         "novam/database": "*",
         "novam/http-client": "*",
         "novam/routing": "*",
-        "novam/application": "*"
+        "novam/application": "*",
+        "symfony/var-dumper": "6.3.x-dev"
     },
     "minimum-stability": "dev"
 }

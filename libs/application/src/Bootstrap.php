@@ -3,16 +3,18 @@ namespace HexaPHP\Libs\Application;
 use HexaPHP\Libs\HttpClient\Response;
 use HexaPHP\Libs\HttpClient\Request;
 use HexaPHP\Libs\Routing\Router;
+use Closure;
 
-class App
+class Bootstrap
 {
     public Router $router;
     public Request $request;
     public array $routes;
+    public Closure $next;
 
-    private $middlewares;
+    private array $middlewares;
 
-    public function __construct(){
+    public function __construct(Container $container){
         $this->request = new Request();
         $this->router = new Router();
     }
@@ -22,14 +24,6 @@ class App
         $method = $request->getMethod();
 
         $action = $this->router->getRoute($method, $path);
-
-        if (!$action){
-            return new Response(
-                'Not Found',
-                404,
-                $request->headers->all(),
-            );
-        }
 
         $content = $this->router->handle($action);
 
@@ -49,10 +43,11 @@ class App
     }
 
     public function globals(){
-        return $this->request->fromGlobals();
+        $globals = $this->request->fromGlobals();
+        return $globals;
     }
 
-    public function register($routes){
+    public function register($routes): void{
 
         foreach($routes as $route => $action){
             [$method, $path] = explode(' ', $route);
@@ -62,6 +57,10 @@ class App
 
     public function pipe($middlewares){
         $this->middlewares = $middlewares;
+
+        foreach($this->middlewares as $when => $action){
+            $this->next = fn($request) => $this->router->handle($action);
+        }
     }
 
 }

@@ -1,6 +1,11 @@
 #!/bin/bash
 
-
+# Check if wget is installed
+if ! command -v wget &> /dev/null
+then
+    echo "Please install wget manually and try again."
+    exit 1
+fi
 
 # Ask the user for the app name
 read -p "Enter the app name: " APP_NAME
