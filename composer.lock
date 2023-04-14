@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d980fcf527b827a1ef9a6669a16aa016",
+    "content-hash": "2239ef35cd78a828a0726360dcd0ef91",
     "packages": [
         {
             "name": "brick/math",
@@ -649,6 +649,25 @@
             "time": "2023-02-25T13:14:29+00:00"
         },
         {
+            "name": "novam/application",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "libs/application",
+                "reference": "04bfd15efffe6abd692d106222642d9738550171"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HexaPHP\\Libs\\Application\\": "src/"
+                }
+            },
+            "description": "Description of the  library",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "novam/database",
             "version": "dev-main",
             "dist": {
@@ -688,6 +707,25 @@
                 }
             },
             "description": "Description of the Http Client library",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "novam/routing",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "libs/routing",
+                "reference": "260aee83fc78d0ea7e985fca3d1e86f9d6ac967b"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HexaPHP\\Libs\\Routing\\": "src/"
+                }
+            },
+            "description": "Description of the  library",
             "transport-options": {
                 "relative": true
             }

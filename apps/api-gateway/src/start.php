@@ -1,22 +1,20 @@
 <?php
 
-use HexaPHP\Libs\HttpClient\Response;
-use HexaPHP\Libs\HttpClient\Request;
+$app = new \HexaPHP\Libs\Application\App();
 
-class Application{
+$routes = require_once __DIR__ . '/routes.php';
 
-    public function process(Request $request){
-        // var_dump($request);
-        return new Response(
-            'Hello World',
-            200,
-            $request->headers->all(),
-        );
-    }
-}
+$middlewares = [
+    "before" => [
 
-$app = new Application();
+    ],
+    "after" => [
 
+    ],
+];
 
+$app->pipe($middlewares);
+
+$app->register($routes);
 
 return $app;

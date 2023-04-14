@@ -27,8 +27,8 @@ require ROOT. '/vendor/autoload.php';
 
 $app = require_once __DIR__ . '/src/start.php';
 
-$request = Request::fromGlobals();
+$request = $app->request->fromGlobals();
 
-$response = $app->process($request);
+$app->process($request)->send();
 
-$response->send();
+define('APP_STOP', microtime(true));

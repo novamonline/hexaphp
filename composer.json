@@ -35,22 +35,6 @@
         },
         {
             "type": "path",
-            "url": "libs/routing"
-        },
-        {
-            "type": "path",
-            "url": "libs/routing"
-        },
-        {
-            "type": "path",
-            "url": "libs/application"
-        },
-        {
-            "type": "path",
-            "url": "libs/application"
-        },
-        {
-            "type": "path",
             "url": "libs/application"
         },
         {

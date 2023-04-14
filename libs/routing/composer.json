@@ -1,13 +1,13 @@
 {
-    "name": "/",
+    "name": "novam/routing",
     "type": "library",
     "description": "Description of the  library",
     "autoload": {
         "psr-4": {
-            "HexaPHP\\Libs\\__NAME:pascal__": "src/"
+            "HexaPHP\\Libs\\Routing\\": "src/"
         }
     },
      "config": {
         "vendor-dir": "../../vendor"
-    },
+    }
 }

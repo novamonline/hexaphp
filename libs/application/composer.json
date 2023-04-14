@@ -1,13 +1,13 @@
 {
-    "name": "/",
+    "name": "novam/application",
     "type": "library",
     "description": "Description of the  library",
     "autoload": {
         "psr-4": {
-            "HexaPHP\\Libs\\__NAME:pascal__": "src/"
+            "HexaPHP\\Libs\\Application\\": "src/"
         }
     },
      "config": {
         "vendor-dir": "../../vendor"
-    },
+    }
 }

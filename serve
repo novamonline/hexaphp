@@ -1,0 +1,46 @@
+#!/bin/bash
+
+
+
+# Ask the user for the app name
+read -p "Enter the app name: " APP_NAME
+
+# Set the app path
+APP_PATH="apps/$APP_NAME"
+
+# Set default certificate files
+DEFAULT_CERTS_DIR="/etc/nginx/certs"
+DEFAULT_CERT_FILE="$APP_NAME.com.crt"
+DEFAULT_KEY_FILE="$APP_NAME.com.key"
+
+# Ask the user for the port number
+read -p "Enter the port number (default: 8443): " PORT
+PORT=${PORT:-8443}
+
+# Ask the user for the certificate files
+read -p "Enter the path to the directory containing the certificate files (default: $DEFAULT_CERTS_DIR): " CERTS_DIR
+CERTS_DIR=${CERTS_DIR:-$DEFAULT_CERTS_DIR}
+
+read -p "Enter the certificate file name (default: $DEFAULT_CERT_FILE): " CERT_FILE
+CERT_FILE=${CERT_FILE:-$DEFAULT_CERT_FILE}
+
+read -p "Enter the key file name (default: $DEFAULT_KEY_FILE): " KEY_FILE
+KEY_FILE=${KEY_FILE:-$DEFAULT_KEY_FILE}
+
+# Check if the certificate files exist, if not, ask the user to install them
+if [ ! -f "$CERTS_DIR/$CERT_FILE" ] || [ ! -f "$CERTS_DIR/$KEY_FILE" ]; then
+    echo "Certificate files not found in directory: $CERTS_DIR"
+    read -p "Do you want to install them now? (y/n) " INSTALL_CERTS
+
+    if [ "$INSTALL_CERTS" == "y" ]; then
+        # Download and install the certificates
+        wget -P $CERTS_DIR https://$APP_NAME.com/$CERT_FILE
+        wget -P $CERTS_DIR https://$APP_NAME.com/$KEY_FILE
+    else
+        echo "Please provide valid certificate files."
+        exit 1
+    fi
+fi
+
+# Start the PHP built-in server
+php -S 127.0.0.1:$PORT -t $APP_PATH --cert $CERTS_DIR/$CERT_FILE --key $CERTS_DIR/$KEY_FILE
