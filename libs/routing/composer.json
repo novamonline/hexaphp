@@ -1,10 +1,13 @@
 {
-    "name": "novamonline/routing",
-    "description": "Description of the routing library",
-    "require": [],
+    "name": "/",
+    "type": "library",
+    "description": "Description of the  library",
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "HexaPHP\\Libs\\__NAME:pascal__": "src/"
         }
-    }
+    },
+     "config": {
+        "vendor-dir": "../../vendor"
+    },
 }

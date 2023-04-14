@@ -6,7 +6,14 @@ use HexaPHP\Helpers\Str;
 abstract class BaseCommand
 {
     protected string $vendorName;
+    protected StubsProcessor $stubsProcessor;
     abstract public function execute(array $args): void;
+
+    public function __construct()
+    {
+        $this->vendorName = "novam";
+        $this->stubsProcessor = new StubsProcessor();
+    }
 
     protected function createDirectory($path)
     {
@@ -117,24 +124,11 @@ abstract class BaseCommand
         echo "composer.json has been updated to include the new library.\n";
     }
 
-    public function stubReplace(array $placeholders, string $content, $delim = "|"): string
+    public function stubReplace(array $placeholders, string $content): string
     {
-        return preg_replace_callback('/\{\{([\w|]+)\}\}/', function ($matches) use ($delim, $placeholders) {
-            [$varName, $func] = array_pad(explode($delim, $matches[1], 2), 2, null);
-            if (isset($placeholders[$varName])) {
-                $value = $placeholders[$varName];
-                if ($func) {
-                    if (method_exists(Str::class, $func)) {
-                        $value = Str::$func($value);
-                    } else {
-                        throw new RuntimeException("Invalid function: {$func}");
-                    }
-                }
-                return $value;
-            }
-            throw new RuntimeException("Invalid placeholder: {$varName}");
-
-        }, $content);
+        $this->stubsProcessor->setPlaceholders($placeholders);
+        $result = $this->stubsProcessor->replace($content);
+        return $result;
     }
 
     protected function removeFromComposerJson(string $baseDir, string $libName): void

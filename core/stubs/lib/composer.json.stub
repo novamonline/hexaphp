@@ -1,10 +1,10 @@
 {
-    "name": "__VENDOR__/__LIB__",
+    "name": "__VENDOR__/__NAME__",
     "type": "library",
-    "description": "Description of the __LIB__ library",
+    "description": "Description of the __NAME__ library",
     "autoload": {
         "psr-4": {
-            "HexaPHP\\Libs\\__LIB__|upper": "src/"
+            "HexaPHP\\Libs\\__NAME:pascal__": "src/"
         }
     },
      "config": {

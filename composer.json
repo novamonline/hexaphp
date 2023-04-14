@@ -19,15 +19,43 @@
         },
         {
             "type": "path",
-            "url": "libs/container"
-        },
-        {
-            "type": "path",
             "url": "libs/http-client"
         },
         {
             "type": "path",
-            "url": "libs/request"
+            "url": "libs/routing"
+        },
+        {
+            "type": "path",
+            "url": "libs/routing"
+        },
+        {
+            "type": "path",
+            "url": "libs/routing"
+        },
+        {
+            "type": "path",
+            "url": "libs/routing"
+        },
+        {
+            "type": "path",
+            "url": "libs/routing"
+        },
+        {
+            "type": "path",
+            "url": "libs/application"
+        },
+        {
+            "type": "path",
+            "url": "libs/application"
+        },
+        {
+            "type": "path",
+            "url": "libs/application"
+        },
+        {
+            "type": "path",
+            "url": "libs/application"
         }
     ],
     "require-dev": {
@@ -35,9 +63,9 @@
     },
     "require": {
         "novam/database": "*",
-        "novam/container": "*",
         "novam/http-client": "*",
-        "novam/request": "*"
+        "novam/routing": "*",
+        "novam/application": "*"
     },
     "minimum-stability": "dev"
 }

@@ -1,13 +1,13 @@
 {
-    "name": "novam/request",
+    "name": "/",
     "type": "library",
-    "description": "Description of the request library",
+    "description": "Description of the  library",
     "autoload": {
         "psr-4": {
-            "HexaPHP\\Libs\\": "src/"
+            "HexaPHP\\Libs\\__NAME:pascal__": "src/"
         }
     },
      "config": {
         "vendor-dir": "../../vendor"
-    }
+    },
 }

@@ -1,4 +1,5 @@
 {
-    "__LIB__" : "libName",
-    "__VENDOR__": "vendorName"
+    "__VENDOR__": "novam",
+    "__NAMESPACE__": "HexaPHP\\Libs\\",
+    "__NAME__": ""
 }

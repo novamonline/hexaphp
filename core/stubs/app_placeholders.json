@@ -1,4 +1,5 @@
 {
-    "__APP__" : "appName",
-    "__VENDOR__": "vendorName"
+    "__VENDOR__": "novam",
+    "__NAMESPACE__": "HexaPHP\\Apps\\",
+    "__NAME__": ""
 }

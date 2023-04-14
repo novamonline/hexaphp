@@ -1,14 +1,16 @@
 {
-    "name": "__VENDOR__/__LIB__",
+    "name": "novam/http-client",
     "type": "library",
-    "description": "Description of the __LIB__ library",
-    "require": [],
+    "description": "Description of the Http Client library",
     "autoload": {
         "psr-4": {
-            "HexaPHP\\Apps\\__LIB__|upper": "src/"
+            "HexaPHP\\Libs\\HttpClient\\": "src/"
         }
     },
      "config": {
         "vendor-dir": "../../vendor"
     },
+    "require": {
+        "symfony/http-foundation": "^6.2"
+    }
 }
