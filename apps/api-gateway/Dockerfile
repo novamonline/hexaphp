@@ -5,7 +5,7 @@ FROM my-php-app
 WORKDIR /app
 
 # Copy the application files to the container
-COPY apps/__APP__ ./
+COPY apps/api-gateway ./
 
 # Install application dependencies
 RUN composer install --no-scripts --no-autoloader

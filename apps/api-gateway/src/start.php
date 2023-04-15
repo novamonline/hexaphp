@@ -14,15 +14,14 @@ use HexaPHP\Libs\HttpClient\Response;
 |
 */
 global $container;
-$container = new Container();
-$app = new Bootstrap($container);
+$app = new Bootstrap( $container = new Container() );
 
 /*
 |--------------------------------------------------------------------------
 | Set up pipelines
 |--------------------------------------------------------------------------
 | 
-| Once we have the application, we can handle the incoming request
+| We can set up the pre and post request pipelines for the application
 |
 */
 global $middlewares;
@@ -45,8 +44,7 @@ $middlewares = [
 */
 global $routes;
 $routes = require_once __DIR__ . '/routes.php';
-$app->register($routes);
-$app->pipe($middlewares);
+$app->register($routes)->pipe($middlewares);
 
 /*
 |--------------------------------------------------------------------------
@@ -57,5 +55,4 @@ $app->pipe($middlewares);
 |
 */
 global $request;
-$request = $app->globals();
-return $app->process($request);
+return $app->process( $request = $app->globals() );

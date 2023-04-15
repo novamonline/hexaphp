@@ -1,6 +1,7 @@
 <?php 
 
 namespace HexaPHP\Libs\Routing;
+use Exception;
 
 class Router
 {
@@ -46,11 +47,11 @@ class Router
             $obj = new $className;
     
             if (!method_exists($obj, $methodName)) {
-                throw new \Exception("Method not found: {$methodName} in class: {$className}");
+                throw new Exception("Method not found: {$methodName} in class: {$className}");
             }
     
             return call_user_func_array([$obj, $methodName], $params);
         }
-        throw new \Exception("Invalid route: {$action}");
+        throw new Exception("Invalid route: {$action}");
     }
 }

@@ -30,7 +30,7 @@ class Bootstrap
         return $this->response($content);
     }
 
-    public function response(mixed $content) {
+    public function response(mixed $content): Response {
 
         $headers = $this->request->headers->all();
         
@@ -39,7 +39,7 @@ class Bootstrap
             $headers['Content-Type'] = 'application/json';
         }
 
-        return new Response( $content, 200, $headers);
+        return new Response( $content, 200, $headers );
     }
 
     public function globals(){
@@ -47,20 +47,23 @@ class Bootstrap
         return $globals;
     }
 
-    public function register($routes): void{
+    public function register($routes): self{
 
         foreach($routes as $route => $action){
-            [$method, $path] = explode(' ', $route);
+            [$method, $path] = array_pad(explode(' ', $route), 2, null);
             $this->router->addRoute($method, $path, $action);    
         }
+        return $this;
     }
 
-    public function pipe($middlewares){
+    public function pipe($middlewares): self {
+        
         $this->middlewares = $middlewares;
 
         foreach($this->middlewares as $when => $action){
-            $this->next = fn($request) => $this->router->handle($action);
+            $this->next = fn($request) => $this->router->handle($action, [$request]);
         }
+        return $this;
     }
 
 }
