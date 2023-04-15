@@ -42,7 +42,7 @@ class Bootstrap
         return new Response( $content, 200, $headers );
     }
 
-    public function globals(){
+    public function requestGlobals(){
         $globals = $this->request->fromGlobals();
         return $globals;
     }
@@ -56,9 +56,9 @@ class Bootstrap
         return $this;
     }
 
-    public function pipe($middlewares): self {
+    public function pipe($pipes): self {
         
-        $this->middlewares = $middlewares;
+        $this->middlewares = $pipes['middlewares'] ?? [];
 
         foreach($this->middlewares as $when => $action){
             $this->next = fn($request) => $this->router->handle($action, [$request]);

@@ -1,9 +1,13 @@
 <?php 
 
-class HomeController
+use HexaPHP\Libs\Application\Controller;
+use HexaPHP\Libs\Database\Model;
+
+class HomeController extends Controller
 {
     public function __invoke()
     {
+        
         return [
             "message" => "Hello World from Home Controller",
         ];
