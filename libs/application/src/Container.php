@@ -1,14 +1,15 @@
 <?php 
 namespace HexaPHP\Libs\Application;
+
 use Exception;
 use Closure;
 use ReflectionClass;
+use Psr\Container\ContainerInterface;
 
 /**
  * Handles dependency injection
  */
-
- class Container
+class Container implements ContainerInterface
 {
     private $bindings = [];
     
@@ -17,13 +18,13 @@ use ReflectionClass;
         $this->bindings[$abstract] = $concrete;
     }
     
-    public function make(string $abstract)
+    public function get(string $id): ?object
     {
-        if (!isset($this->bindings[$abstract])) {
-            throw new Exception("No binding found for '{$abstract}'");
+        if (!isset($this->bindings[$id])) {
+            throw new Exception("No binding found for '{$id}'");
         }
         
-        $concrete = $this->bindings[$abstract];
+        $concrete = $this->bindings[$id];
         
         if ($concrete instanceof Closure) {
             return $concrete($this);
@@ -47,6 +48,11 @@ use ReflectionClass;
         return $reflector->newInstanceArgs($dependencies);
     }
     
+    public function has(string $id): bool
+    {
+        return isset($this->bindings[$id]);
+    }
+    
     private function resolveDependencies(array $parameters)
     {
         $dependencies = [];
@@ -62,7 +68,7 @@ use ReflectionClass;
                 }
             } else {
                 $className = $typeHint->getName();
-                $dependencies[] = $this->make($className);
+                $dependencies[] = $this->get($className);
             }
         }
         

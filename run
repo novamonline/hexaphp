@@ -20,8 +20,6 @@ use HexaPHP\Core\Cmd\RemoveLibCmd;
 
 $args = array_slice($argv, 1);
 
-
-
 $Cmd = array_shift($args);
 $name = array_shift($args);
 
@@ -34,9 +32,10 @@ $readArg = function(string $appOrLib) {
         echo "Usage: run <Cmd> <name>\n";
         exit(1);
     }
+    return $entry;
 };
 
-$runCommand = function($cmd, $type) use($readArg, $name, $args){
+$runCommand = function(string $cmd, string $type) use($readArg, $name, $args){
     $createCmd = new $cmd();
     if ($name == ""){
         $name = $readArg($type);
@@ -78,7 +77,6 @@ switch (strtolower($Cmd)) {
         $env = $args[2] ?? 'local';
         // exec("scp package.zip user@production:/path/to/destination");
         break;
-        
     default:
         echo "Unknown Cmd: {$Cmd}\n";
         exit(1);

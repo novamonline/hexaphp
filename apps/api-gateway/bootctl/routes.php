@@ -1,22 +1,9 @@
 <?php 
 
-use HexaPHP\Libs\Application\Controller;
-use HexaPHP\Libs\Database\Model;
-
-class HomeController extends Controller
-{
-    public function __invoke()
-    {
-        
-        return [
-            "message" => "Hello World from Home Controller",
-        ];
-    }
-}
 
 return [
-    "GET /" => [HomeController::class],
-    "GET /help" => function(){
+    "GET /" => [\App\Controller\HomeController::class],
+    "GET /help/{user}" => function(){
       
         return [
             "message" => "Hello World from Closure",

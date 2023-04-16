@@ -4,6 +4,7 @@ use HexaPHP\Libs\Application\Bootstrap;
 use HexaPHP\Libs\Application\Container;
 use HexaPHP\Libs\HttpClient\Request;
 use HexaPHP\Libs\HttpClient\Response;
+use HexaPHP\Libs\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,6 @@ global $routes;
 global $request;
 
 
-
-
 return function() {
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +30,10 @@ return function() {
     |
     */
     $container = new Container();
-    $bootstrap = new Bootstrap( $container );
+    $container->bind('router', Router::class);
+    $container->bind('request', Request::class);
+    $container->bind('response', Response::class);
+    $application = new Bootstrap( $container );
 
     /*
     |--------------------------------------------------------------------------
@@ -43,8 +45,7 @@ return function() {
     */
     $pipes = require_once __DIR__ . '/builder.php';
     $routes = require_once __DIR__ . '/routes.php';
-
-    $bootstrap->register( $routes )->pipe( $pipes );
+    $application->register( $routes )->pipe( $pipes );
 
     /*
     |--------------------------------------------------------------------------
@@ -54,6 +55,6 @@ return function() {
     | Once we have the application, we can handle the incoming request
     |
     */
-    $request = $bootstrap->requestGlobals();
-    return $bootstrap->process( $request ); 
+    $request = $application->requestGlobals();
+    return $application->process( $request ); 
 };

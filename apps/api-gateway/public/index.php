@@ -2,7 +2,7 @@
 
 define('APP_START', microtime(true));
 
-$BASE = realpath(__DIR__ . '/../');
+$APP = realpath(__DIR__ . '/../');
 $ROOT = realpath(__DIR__ . '/../../../');
 
 /*
@@ -24,7 +24,7 @@ require_once $ROOT . '/vendor/autoload.php';
 |
 */
 
-$app = require_once $BASE . '/bootctl/app.php';
+$app = require_once $APP . '/bootctl/app.php';
 
 $app()->run();
 
