@@ -1,8 +1,8 @@
 <?php
 namespace HexaPHP\Libs\Application;
 
-use HexaPHP\Libs\HttpClient\Request;
-use HexaPHP\Libs\HttpClient\Response;
+use HexaPHP\Libs\HttpClient\IRequest;
+use HexaPHP\Libs\HttpClient\IResponse;
 use HexaPHP\Libs\Routing\Router;
 use Closure;
 use Psr\Container\ContainerInterface;
@@ -11,7 +11,8 @@ class Bootstrap
 {
     private ContainerInterface $container;
     private Router $router;
-    private Request $request;
+    private IRequest $request;
+    private IResponse $response;
     private Closure $next;
     private array $middlewares;
 
@@ -20,9 +21,10 @@ class Bootstrap
         $this->container = $container;
         $this->router = $container->get('router');
         $this->request = $container->get('request');
+        $this->response = $container->get('response');
     }
 
-    public function process(Request $request): Response
+    public function process(IRequest $request): IResponse
     {
         $path = $request->getPathInfo();
         $method = $request->getMethod();
@@ -34,7 +36,7 @@ class Bootstrap
         return $this->response($content);
     }
 
-    public function response(mixed $content): Response
+    public function response(mixed $content): StreamInterface
     {
         $headers = $this->request->headers->all();
 
@@ -43,7 +45,7 @@ class Bootstrap
             $headers['Content-Type'] = 'application/json';
         }
 
-        return new Response($content, 200, $headers);
+        return $this->response->getBody($content, 200, $headers);
     }
 
     public function requestGlobals()
@@ -52,11 +54,20 @@ class Bootstrap
         return $globals;
     }
 
-    public function register($routes): self
+    public function register(string $type, array $registrants): self
     {
-        foreach ($routes as $route => $action) {
-            [$method, $path] = array_pad(explode(' ', $route), 2, null);
-            $this->router->addRoute($method, $path, $action);
+        switch ($type) {
+            case 'routes':
+                foreach ($registrants as $route => $action) {
+                    [$method, $path] = array_pad(explode(' ', $route), 2, null);
+                    $this->router->addRoute($method, $path, $action);
+                }
+                break;
+            case 'middlewares':
+                $this->pipe($registrants);
+                break;
+            default:
+                break;
         }
 
         return $this;

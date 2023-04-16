@@ -2,8 +2,8 @@
 
 use HexaPHP\Libs\Application\Bootstrap;
 use HexaPHP\Libs\Application\Container;
-use HexaPHP\Libs\HttpClient\Request;
-use HexaPHP\Libs\HttpClient\Response;
+use App\Http\Responses\Response;
+use App\Http\Requests\Request;
 use HexaPHP\Libs\Routing\Router;
 
 /*
@@ -43,9 +43,14 @@ return function() {
     | Once we have the application, we can handle the incoming request
     |
     */
-    $pipes = require_once __DIR__ . '/builder.php';
     $routes = require_once __DIR__ . '/routes.php';
-    $application->register( $routes )->pipe( $pipes );
+    $builder = require_once __DIR__ . '/builder.php';
+    $configs = require_once __DIR__ . '/configs.php';
+    $middlewares = require_once __DIR__ . '/middlewares.php';
+    $application->register( 'routes', $routes );
+    $application->register( 'builders', $builder );
+    $application->register( 'configs', $configs );
+    $application->pipe( ...$middlewares );
 
     /*
     |--------------------------------------------------------------------------

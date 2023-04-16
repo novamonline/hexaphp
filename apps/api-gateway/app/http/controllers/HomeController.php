@@ -1,10 +1,10 @@
 <?php 
 
-namespace App\Bootctl;
+namespace App\Http\Controllers;
 
 use App\Domain\Entities\User;
 
-class HomeController extends BsseController
+class HomeController extends Controller
 {
     public function __invoke()
     {

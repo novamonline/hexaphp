@@ -50,7 +50,8 @@
         "novam/http-client": "*",
         "novam/routing": "*",
         "novam/application": "*",
-        "symfony/var-dumper": "6.3.x-dev"
+        "symfony/var-dumper": "6.3.x-dev",
+        "php-di/php-di": "dev-master"
         
     },
     "minimum-stability": "dev"
